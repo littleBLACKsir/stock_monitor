@@ -1,0 +1,68 @@
+# 超跌/超涨判断阈值配置
+# 更新日期：2026-04-08
+
+# RSI指标阈值
+rsi:
+  strong_oversold: 25
+  oversold: 30
+  weak_oversold: 40
+  weak_overbought: 60
+  overbought: 70
+  strong_overbought: 80
+
+# KDJ指标阈值
+kdj:
+  strong_oversold: 15
+  oversold: 20
+  weak_oversold: 30
+  weak_overbought: 70
+  overbought: 80
+  strong_overbought: 85
+
+# 布林带位置
+bollinger:
+  lower_band_oversold: -2
+  lower_band_weak_oversold: -1
+  upper_band_weak_overbought: 1
+  upper_band_overbought: 2
+
+# 均线偏离度
+ma_deviation:
+  strong_oversold: -10
+  oversold: -5
+  weak_oversold: -3
+  weak_overbought: 3
+  overbought: 5
+  strong_overbought: 10
+
+# 超跌评分权重
+scoring_weights:
+  rsi: 30
+  kdj: 25
+  bollinger: 20
+  ma_deviation: 15
+  volume_ratio: 10
+
+# 评分等级
+score_levels:
+  strong_buy:
+    min: 70
+    description: "强超跌，建议重点关注"
+  buy:
+    min: 50
+    description: "超跌，可以考虑建仓"
+  watch:
+    min: 40
+    description: "弱超跌，观望"
+  hold:
+    min: 20
+    description: "正常区间，持有"
+  sell:
+    min: 0
+    description: "超涨，考虑减仓"
+
+# 量比阈值
+volume_ratio:
+  high_volume: 2.0
+  normal_volume: 1.0
+  low_volume: 0.5

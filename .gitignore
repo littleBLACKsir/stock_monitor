@@ -1,0 +1,26 @@
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+
+# 报告文件（可选，如果不想上传生成的报告）
+# reports/
+
+# 日志
+*.log
+
+# 敏感配置（如果有）
+*.local.yaml
+secrets.yaml
