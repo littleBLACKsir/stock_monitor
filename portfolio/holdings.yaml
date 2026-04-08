@@ -1,0 +1,109 @@
+# 持仓记录
+# 更新日期：{YYYY-MM-DD}
+# 说明：记录当前持有的股票，每次买入/卖出后更新此文件
+
+# ============================================================
+# 账户信息
+# ============================================================
+account:
+  total_capital: 100000        # 总资金（元）
+  available_cash: 100000       # 可用现金（元）
+  ai_sector_used: 0            # AI板块已用仓位（元）
+  ai_sector_limit: 50000       # AI板块仓位上限（元，=总资金*50%）
+  last_update: "2026-04-08"
+
+# ============================================================
+# 当前持仓
+# ============================================================
+# 字段说明：
+# - code: 股票代码
+# - name: 股票名称
+# - sector: 所属赛道
+# - rank: 龙头/次龙头
+# - buy_date: 买入日期
+# - buy_price: 买入均价（分批买入时为加权平均）
+# - current_price: 当前价格（每周四更新）
+# - shares: 持股数量
+# - cost: 总成本
+# - market_value: 当前市值
+# - profit_loss: 浮动盈亏
+# - profit_pct: 盈亏比例
+# - stop_loss_price: 止损价
+# - take_profit_price: 止盈价
+# - batch: 当前批次（1/2/3）
+# - ai_score: 买入时的AI评分
+# - status: holding/watching/stopping
+
+holdings: []
+# 示例持仓（实际使用时删除此注释）：
+# holdings:
+#   - code: "300474"
+#     name: "景嘉微"
+#     sector: "AI芯片"
+#     rank: "次龙头"
+#     buy_date: "2026-04-10"
+#     buy_price: 56.50
+#     current_price: 58.20
+#     shares: 100
+#     cost: 5650.00
+#     market_value: 5820.00
+#     profit_loss: 170.00
+#     profit_pct: 3.01
+#     stop_loss_price: 48.00
+#     take_profit_price: 67.80
+#     batch: 1
+#     ai_score: 55
+#     status: "holding"
+#     notes: "第一批建仓，评分55分，支撑位54-55元"
+
+# ============================================================
+# 持仓统计（自动计算）
+# ============================================================
+summary:
+  total_holdings: 0            # 持仓股票数量
+  total_cost: 0                # 总成本
+  total_market_value: 0        # 总市值
+  total_profit_loss: 0         # 总盈亏
+  total_profit_pct: 0          # 总盈亏比例
+  
+  # 止损预警
+  stop_loss_warning: []        # 接近止损的股票（亏损>7%）
+  # stop_loss_warning:
+  #   - code: "300474"
+  #     name: "景嘉微"
+  #     profit_pct: -8.5
+  #     action: "关注，准备止损复盘"
+  
+  # 止盈提醒
+  take_profit_reminder: []     # 接近止盈的股票（盈利>15%）
+  
+  # 仓位使用情况
+  position_usage:
+    ai_sector_pct: 0           # AI板块仓位使用比例
+    single_stock_max: 0        # 单股最大仓位比例
+
+# ============================================================
+# 观察名单（评分≥40但未买入）
+# ============================================================
+watchlist: []
+# watchlist:
+#   - code: "603019"
+#     name: "中科曙光"
+#     sector: "AI服务器"
+#     ai_score: 50
+#     current_price: 80.00
+#     support_price: 77.00
+#     add_date: "2026-04-10"
+#     reason: "评分50分，等待企稳确认"
+
+# ============================================================
+# 已止损/清仓记录（简要）
+# ============================================================
+closed_positions: []
+# closed_positions:
+#   - code: "688498"
+#     name: "源杰科技"
+#     close_date: "2026-04-03"
+#     close_reason: "止损"
+#     profit_loss: -1500.00
+#     profit_pct: -15.2

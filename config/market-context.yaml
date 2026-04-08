@@ -1,0 +1,145 @@
+# 市场环境配置
+# 更新日期：{YYYY-MM-DD}
+# 说明：记录当前市场环境，用于动态调整仓位和风险偏好
+
+# ============================================================
+# 大盘指数状态（每周四更新）
+# ============================================================
+market_indices:
+  sh000300:                      # 沪深300
+    name: "沪深300"
+    current: 3850                 # 当前点位
+    ma5: 3820                     # 5日均线
+    ma20: 3780                    # 20日均线
+    trend: "neutral"              # uptrend/downtrend/neutral
+    weekly_change: 1.2            # 本周涨跌幅%
+    
+  sz399006:                      # 创业板指
+    name: "创业板指"
+    current: 2150
+    ma5: 2120
+    ma20: 2080
+    trend: "neutral"
+    weekly_change: 1.8
+    
+  sz399975:                      # 中证全指通信设备指数（光模块相关）
+    name: "通信设备"
+    current: 5820
+    ma5: 5750
+    ma20: 5600
+    trend: "uptrend"
+    weekly_change: 3.5
+
+# ============================================================
+# 市场情绪指标
+# ============================================================
+market_sentiment:
+  # 整体情绪评分（0-100）
+  overall_score: 55
+  
+  # 情绪等级
+  level: "neutral"               # panic/fear/neutral/greed/euphoria
+  
+  # 各项指标
+  indicators:
+    northbound_fund:             # 北向资金
+      weekly_net: 15.2           # 本周净流入（亿元）
+      signal: "positive"         # positive/neutral/negative
+      
+    margin_balance:              # 融资余额
+      weekly_change: 0.5         # 本周变化%
+      signal: "neutral"
+      
+    new_accounts:                # 新开户数
+      weekly_change: -2.1        # 本周变化%
+      signal: "negative"
+      
+    turnover_rate:               # 换手率
+      current: 2.8               # 当前换手率%
+      signal: "neutral"
+
+# ============================================================
+# 市场环境判断
+# ============================================================
+market_environment:
+  # 综合判断
+  overall: "neutral"             # bullish/neutral/bearish
+  
+  # 判断依据
+  reasons:
+    - "沪深300站上5日均线，短期趋势中性偏多"
+    - "北向资金本周净流入，外资态度积极"
+    - "AI算力板块整体反弹，但部分标的超买"
+  
+  # 仓位调整建议
+  position_adjustment:
+    base_limit: 0.50             # 基础仓位上限（AI板块）
+    current_limit: 0.50          # 当前建议上限
+    adjustment_reason: "市场环境中性，维持基础仓位上限"
+    
+  # 特殊情况标记
+  special_flags: []
+  # special_flags:
+  #   - flag: "财报季"
+  #     impact: "降低仓位，避免业绩不确定性"
+  #   - flag: "政策窗口期"
+  #     impact: "关注政策相关标的"
+
+# ============================================================
+# 板块轮动状态
+# ============================================================
+sector_rotation:
+  # 强势板块
+  strong_sectors:
+    - name: "光模块/CPO"
+      reason: "AI算力需求持续，业绩确定性高"
+      risk: "部分标的超买"
+    - name: "液冷散热"
+      reason: "AI服务器功率提升，液冷渗透加速"
+      risk: "估值偏高"
+  
+  # 弱势板块
+  weak_sectors:
+    - name: "AI芯片"
+      reason: "国产替代进程波动，部分标的业绩承压"
+      opportunity: "超跌后可能有反弹机会"
+  
+  # 资金流向
+  capital_flow:
+    inflow_sectors: ["光模块/CPO", "液冷散热"]
+    outflow_sectors: []
+
+# ============================================================
+# 风险事件监控
+# ============================================================
+risk_monitor:
+  # 当前风险等级
+  level: "medium"                # low/medium/high
+  
+  # 风险事件列表
+  events: []
+  # events:
+  #   - date: "2026-04-15"
+  #     event: "美联储议息会议"
+  #     impact: "可能影响全球科技股估值"
+  #     action: "会议前降低仓位"
+  
+  # 系统性风险指标
+  systemic_risk:
+    vix_level: 18                # VIX指数
+    credit_spread: "normal"      # credit_spread状态
+    liquidity: "normal"          # 市场流动性状态
+
+# ============================================================
+# 历史环境记录（用于回测和复盘）
+# ============================================================
+history:
+  - date: "2026-04-03"
+    environment: "bearish"
+    position_limit: 0.40
+    reason: "关税冲击，市场大幅下跌"
+    
+  - date: "2026-04-10"
+    environment: "neutral"
+    position_limit: 0.50
+    reason: "市场企稳反弹，情绪修复"

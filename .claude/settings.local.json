@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:finance.sina.com.cn)",
+      "WebFetch(domain:xueqiu.com)",
+      "WebFetch(domain:cn.tradingview.com)",
+      "WebFetch(domain:caifuhao.eastmoney.com)",
+      "WebFetch(domain:unifuncs.com)",
+      "WebFetch(domain:cn.investing.com)",
+      "WebFetch(domain:cj.sina.cn)",
+      "WebFetch(domain:q.stock.sohu.com)",
+      "WebFetch(domain:stock.eastmoney.com)",
+      "WebFetch(domain:www.cnyes.com)",
+      "WebFetch(domain:hk.finance.yahoo.com)",
+      "WebFetch(domain:www.aastocks.com)",
+      "WebFetch(domain:www.9fzt.com)"
+    ]
+  }
+}

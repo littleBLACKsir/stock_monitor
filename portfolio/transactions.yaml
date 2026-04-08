@@ -1,0 +1,54 @@
+# 交易记录
+# 更新日期：{YYYY-MM-DD}
+# 说明：记录所有买入/卖出操作，用于复盘和统计分析
+
+# ============================================================
+# 交易记录
+# ============================================================
+# 字段说明：
+# - id: 交易序号
+# - date: 交易日期
+# - code: 股票代码
+# - name: 股票名称
+# - action: buy/sell/stop_loss/take_profit
+# - price: 成交价格
+# - shares: 成交数量
+# - amount: 成交金额
+# - batch: 批次（1/2/3，仅买入时）
+# - ai_score: 买入时的AI评分
+# - reason: 操作原因
+# - ai_source: 推荐的AI（豆包/元宝/Claude/共识）
+# - notes: 备注
+
+transactions: []
+
+# ============================================================
+# 交易统计（按月汇总）
+# ============================================================
+monthly_summary: []
+# monthly_summary:
+#   - month: "2026-04"
+#     total_trades: 5
+#     buy_count: 3
+#     sell_count: 2
+#     total_buy_amount: 25000
+#     total_sell_amount: 18000
+#     realized_profit: 1500
+#     win_count: 1
+#     loss_count: 1
+#     win_rate: 50.0
+
+# ============================================================
+# 年度统计
+# ============================================================
+yearly_summary: []
+# yearly_summary:
+#   - year: "2026"
+#     total_trades: 15
+#     realized_profit: 8500
+#     win_count: 9
+#     loss_count: 6
+#     win_rate: 60.0
+#     max_drawdown: -8.5
+#     best_trade: "景嘉微 +25%"
+#     worst_trade: "源杰科技 -15%"
