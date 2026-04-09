@@ -39,10 +39,10 @@ oversold_scoring:
   factors:
     rsi:
       weight: 0.30
-      center: 35
+      center: 30
       scale: 10
       direction: "lower_better"
-      explanation: "RSI 越低，越偏向均值回归观察。"
+      explanation: "RSI<30 为A股市场公认的超卖区间，越低越偏向均值回归。"
 
     bollinger:
       weight: 0.25

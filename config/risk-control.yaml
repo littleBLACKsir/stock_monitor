@@ -36,6 +36,12 @@ stop_loss:
     multiplier: 2.5
     floor_pct: 0.08
     cap_pct: 0.18
+    role_multipliers:
+      leader: 2.5
+      sub_leader: 2.0
+      high_risk: 3.0
+      etf: 2.0
+    note: "高波动股(high_risk)用3倍ATR，龙头股(leader)用2.5倍，稳健股用2倍"
 
 take_profit:
   primary: 0.20
@@ -83,3 +89,29 @@ action_mapping:
 
 reporting:
   checklist_title: "下单前检查清单"
+
+a_share_rules:
+  t_plus_1:
+    enabled: true
+    note: "A股T+1交易规则：当日买入的股票次日才能卖出，需预留机动资金"
+    suggested_cash_reserve: 0.30
+  
+  price_limit:
+    main_board:
+      up_limit: 0.10
+      down_limit: -0.10
+      note: "主板涨跌停限制10%"
+    gem_star:
+      up_limit: 0.20
+      down_limit: -0.20
+      note: "创业板/科创板涨跌停限制20%"
+  
+  one_word_board_warning:
+    enabled: true
+    description: "一字板（涨停/跌停开盘且全天无波动）无法买入或卖出"
+    action: "观望"
+    note: "一字板股票流动性极差，不建议追涨或抄底"
+  
+  suspension_handling:
+    action: "reject"
+    note: "停牌股票无法交易，需等待复牌"

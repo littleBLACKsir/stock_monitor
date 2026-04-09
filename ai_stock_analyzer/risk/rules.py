@@ -69,7 +69,8 @@ def evaluate_trade_decision(
     atr_cfg = risk_config["stop_loss"]["atr"]
     atr_value = float(latest.get(f"atr{atr_cfg['period']}", latest.get("atr14", 0.0)) or 0.0)
     close = float(latest["close"])
-    atr_pct = clamp(atr_cfg["multiplier"] * atr_value / max(close, 1e-6), atr_cfg["floor_pct"], atr_cfg["cap_pct"])
+    role_multiplier = atr_cfg.get("role_multipliers", {}).get(stock["role"], atr_cfg["multiplier"])
+    atr_pct = clamp(role_multiplier * atr_value / max(close, 1e-6), atr_cfg["floor_pct"], atr_cfg["cap_pct"])
     stop_loss_pct = atr_pct if risk_config["stop_loss"]["primary_mode"] == "atr" else risk_config["stop_loss"]["fixed_pct"]
     stop_loss_price = round(close * (1 - stop_loss_pct), 4)
 
