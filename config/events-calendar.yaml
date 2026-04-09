@@ -1,163 +1,44 @@
-# 重大事件日历
-# 更新日期：{YYYY-MM-DD}
-# 说明：记录可能影响AI算力产业链的重大事件，用于风险规避和机会把握
+# 事件与财报窗口
 
-# ============================================================
-# 定期事件（每年固定时间）
-# ============================================================
+earnings_blackout:
+  days_before: 5
+  days_after: 1
+
 regular_events:
-  # 财报季
-  earnings_season:
-    - period: "Q1财报"
-      start_date: "04-01"
-      end_date: "04-30"
-      impact: "high"
-      description: "一季报披露期，业绩不确定性高"
-      action: "财报发布前5个交易日避免新建仓位"
-      
-    - period: "Q2财报"
-      start_date: "07-01"
-      end_date: "08-31"
-      impact: "high"
-      description: "半年报披露期"
-      action: "关注业绩超预期标的"
-      
-    - period: "Q3财报"
-      start_date: "10-01"
-      end_date: "10-31"
-      impact: "medium"
-      description: "三季报披露期"
-      action: "验证全年业绩预期"
-      
-    - period: "Q4财报"
-      start_date: "01-01"
-      end_date: "04-30"
-      impact: "high"
-      description: "年报披露期，分红预期"
-      action: "关注高分红标的"
-  
-  # 重要会议
-  conferences:
-    - name: "全国两会"
-      period: "03-03 至 03-15"
-      impact: "medium"
-      focus: "科技政策、芯片国产化政策"
-      action: "关注政策相关标的"
-      
-    - name: "中央经济工作会议"
-      period: "12月中旬"
-      impact: "high"
-      focus: "明年经济政策定调"
-      action: "关注政策导向"
-  
-  # 行业大会
-  industry_events:
-    - name: "世界人工智能大会(WAIC)"
-      period: "07月"
-      impact: "medium"
-      focus: "AI技术突破、新产品发布"
-      action: "关注相关标的短期催化"
-      
-    - name: "OFC光网络与通信会议"
-      period: "03月"
-      impact: "medium"
-      focus: "光模块新技术、CPO进展"
-      action: "关注光模块赛道"
-
-# ============================================================
-# 2026年特定事件
-# ============================================================
-events_2026:
-  - date: "2026-04-15"
-    event: "美联储议息会议"
-    type: "macro"
+  - name: "Q1财报季"
+    start: "04-01"
+    end: "04-30"
     impact: "high"
-    description: "可能影响全球科技股估值"
-    action: "会议前降低仓位，关注结果"
-    
-  - date: "2026-04-25"
-    event: "寒武纪一季报"
-    type: "earnings"
+  - name: "Q2财报季"
+    start: "07-01"
+    end: "08-31"
     impact: "high"
-    related_stocks: ["688256"]
-    description: "验证AI芯片业绩拐点"
-    action: "财报前观望"
-    
-  - date: "2026-04-28"
-    event: "中际旭创一季报"
-    type: "earnings"
-    impact: "high"
-    related_stocks: ["300308"]
-    description: "验证光模块龙头业绩"
-    action: "关注业绩指引"
-    
-  - date: "2026-05-15"
-    event: "GTC大会（英伟达）"
-    type: "industry"
+  - name: "Q3财报季"
+    start: "10-01"
+    end: "10-31"
     impact: "medium"
-    description: "英伟达新产品发布"
-    action: "关注AI算力产业链催化"
+  - name: "Q4财报季"
+    start: "01-01"
+    end: "04-30"
+    impact: "high"
 
-# ============================================================
-# 风险事件类型说明
-# ============================================================
-event_types:
-  macro:
-    name: "宏观经济"
-    impact_level: "high"
-    description: "影响整体市场情绪和估值"
-    examples: ["美联储议息", "通胀数据", "PMI数据"]
-    
-  policy:
-    name: "政策法规"
-    impact_level: "high"
-    description: "影响特定行业或公司"
-    examples: ["芯片出口管制", "AI监管政策", "国产替代政策"]
-    
-  earnings:
-    name: "财报业绩"
-    impact_level: "medium"
-    description: "影响单只股票"
-    examples: ["季报发布", "业绩预告", "分红方案"]
-    
-  industry:
-    name: "行业事件"
-    impact_level: "medium"
-    description: "影响板块情绪"
-    examples: ["行业大会", "技术突破", "产品发布"]
-    
-  company:
-    name: "公司事件"
-    impact_level: "low"
-    description: "影响单只股票"
-    examples: ["高管变动", "股权激励", "定增"]
+company_events:
+  - date: "2026-04-25"
+    code: "688256"
+    name: "寒武纪一季报"
+    type: "earnings"
+    impact: "high"
+  - date: "2026-04-28"
+    code: "300308"
+    name: "中际旭创一季报"
+    type: "earnings"
+    impact: "high"
 
-# ============================================================
-# 事件应对策略
-# ============================================================
-response_strategies:
-  high_impact:
-    before: "提前3-5个交易日降低仓位或观望"
-    during: "不操作，等待事件落地"
-    after: "根据结果决定是否重新建仓"
-    
-  medium_impact:
-    before: "正常操作，但降低仓位上限"
-    during: "关注事件进展"
-    after: "评估影响后决定操作"
-    
-  low_impact:
-    before: "正常操作"
-    during: "正常操作"
-    after: "正常操作"
+macro_events:
+  - date: "2026-04-15"
+    name: "美联储议息会议"
+    impact: "high"
+    type: "macro"
 
-# ============================================================
-# 事件提醒设置
-# ============================================================
-reminders:
-  - trigger: "事件前5个交易日"
-    action: "在分析报告中提醒"
-  - trigger: "事件前1个交易日"
-    action: "检查持仓是否需要调整"
-  - trigger: "事件当天"
-    action: "不新建仓位"
+notes:
+  - "若财报日期未知，风险标签输出为未校验，不得假设不存在。"

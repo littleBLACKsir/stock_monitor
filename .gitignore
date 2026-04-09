@@ -14,6 +14,8 @@ __pycache__/
 *.pyo
 .env
 venv/
+.cache/
+.pytest_cache/
 
 # 报告文件（可选，如果不想上传生成的报告）
 # reports/

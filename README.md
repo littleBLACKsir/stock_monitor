@@ -1,132 +1,88 @@
-# AI算力产业链股票分析系统
+# AI 股票研究 / 监控系统
 
-基于文件驱动的AI股票分析工作流，专注于AI算力产业链股票的超跌买入机会发现。
+一个围绕 **AI 算力产业链** 的最小可运行股票研究系统，保留 **文件驱动 + Markdown 报告 + 多 AI 协同** 体验，同时程序化以下环节：
 
-## 项目结构
+- 股票池筛选与候选建议
+- 收敛后的超跌评分
+- 结构化确认信号
+- 风控检查
+- 多 AI 报告命名 / 冲突检测 / 共识聚合
+- 周度复盘指标
 
-```
-ai-stock-analyzer/
-├── AGENTS.md                    # AI分析师工作指南
-├── config/
-│   ├── stocks.yaml              # 股票池配置（16只股票+ETF推荐）
-│   ├── thresholds.yaml          # 技术指标阈值配置 + 数据源规范
-│   ├── risk-control.yaml        # 风险控制配置（仓位/止损/止盈）
-│   ├── market-context.yaml      # 市场环境配置（大盘/情绪/板块轮动）
-│   └── events-calendar.yaml     # 重大事件日历（财报季/会议/风险事件）
-├── templates/
-│   ├── analysis-template.md     # 分析报告模板（16只股票评分表）
-│   ├── multi-ai-vote.md         # 多AI投票汇总模板
-│   └── review-template.md       # 周度复盘模板
-├── portfolio/
-│   ├── holdings.yaml            # 当前持仓记录
-│   └── transactions.yaml        # 交易历史记录
-└── reports/                     # 生成的分析报告目录
-    └── YYYY-MM-DD/
-        ├── doubao-analysis.md   # 豆包分析报告
-        ├── yuanbao-analysis.md  # 元宝分析报告
-        ├── claude-analysis.md   # Claude分析报告
-        └── final-vote.md        # 多AI投票汇总（用户填写）
+详细面向普通用户的教程见：`USER_GUIDE.md`
+
+## 核心约束
+
+1. 默认总分只保留 4 个主因子
+2. KDJ 与 volume_ratio 默认不进入总分
+3. 输出必须包含稳定 JSON 区块
+4. 多 AI 报告文件名统一为：
+
+```text
+{agent}-{vendor}-{model}-analysis.md
 ```
 
-## 核心功能
+## 快速开始
 
-### 1. 超跌评分系统
+安装依赖：
 
-| 指标 | 权重 | 超跌条件 |
-|------|------|----------|
-| RSI(14) | 30% | <25 → 30分 |
-| KDJ-K | 25% | <20 → 25分 |
-| 布林带 | 20% | 下轨下方 → 20分 |
-| MA偏离度 | 15% | <-5% → 15分 |
-| 量比 | 10% | >1.5 → 10分 |
+```powershell
+python -m pip install -r requirements.txt
+```
 
-### 2. 信号确认机制
+查看统一 CLI：
 
-超跌评分≥50分后，需通过信号确认：
-- MACD确认（绿柱缩短/金叉）
-- 成交量确认（放量）
-- K线形态（止跌形态）
-- 均线支撑（站上5日线）
-- 板块共振（同赛道超跌）
+```powershell
+python -m ai_stock_analyzer --help
+```
 
-### 3. 风险控制
+### 1. 生成分析报告
 
-| 规则 | 设置 |
-|------|------|
-| AI板块总仓位 | ≤50% |
-| 单股仓位 | ≤10%（龙头）/ ≤7%（次龙头）/ ≤5%（高风险） |
-| 硬止损 | 亏损15% |
-| 分批建仓 | 3批（40%/35%/25%） |
+```powershell
+python scripts\generate_analysis.py --date 2026-04-10 --agent-name trae --vendor zhipu --model glm5 --toolchain trae --conflict-strategy suffix
+```
 
-### 4. 多AI协同
+### 2. 聚合多 AI 报告
 
-支持多个AI独立分析，用户汇总对比：
-- 高共识标的（≥2个AI推荐）可信度更高
-- 分歧标的需要用户独立判断
+```powershell
+python scripts\aggregate_ai_reports.py --date 2026-04-10
+```
 
-## 股票池概览
+### 3. 生成周度复盘
 
-### 四大赛道
+```powershell
+python scripts\review_metrics.py --previous-date 2026-04-10 --current-date 2026-04-17
+```
 
-| 赛道 | 核心逻辑 | 股票数量 |
-|------|----------|----------|
-| AI芯片 | 国产替代核心，技术壁垒最高 | 4只 |
-| AI服务器 | 算力载体，订单确定性最强 | 4只 |
-| 光模块/CPO | 算力血管，技术迭代最快 | 4只 |
-| 液冷散热 | 配套刚需，渗透率提升最快 | 4只 |
+## 模板与多 AI 协作
 
-### 16只核心股票
+- 统一指令头：`templates/agent-instruction.md`
+- Markdown 结构建议：`templates/analysis-template.md`
+- 多 AI 汇总说明：`templates/multi-ai-vote.md`
+- 周度复盘模板：`templates/review-template.md`
 
-| 赛道 | 龙头股 | 次龙头股 |
-|------|--------|----------|
-| AI芯片 | 寒武纪、海光信息 | 景嘉微、芯原股份 |
-| AI服务器 | 工业富联、浪潮信息 | 中科曙光、紫光股份 |
-| 光模块/CPO | 中际旭创、新易盛 | 天孚通信、源杰科技 |
-| 液冷散热 | 英维克、高澜股份 | 申菱环境、佳力图 |
+## 主要输出
 
-## 使用方法
+### 人类可读
 
-### 每周四分析流程
+- `*-analysis.md`
+- `consensus-summary.md`
+- `conflicts.md`
+- `review.md`
 
-1. **读取配置**：AI读取所有配置文件
-2. **获取数据**：搜索16只股票的技术指标
-3. **计算评分**：根据阈值计算超跌评分
-4. **信号确认**：对评分≥50分的股票进行信号确认
-5. **生成报告**：按模板格式生成分析报告
+### 机器可读
 
-### 持仓管理
+- `analysis-data.json`
+- `universe-selection.csv`
+- `consensus-summary.json`
+- `conflicts.json`
+- `review-metrics.csv`
 
-1. 买入后更新 `portfolio/holdings.yaml`
-2. 记录交易到 `portfolio/transactions.yaml`
-3. 每周更新当前价格和盈亏状态
+## 数据源策略
 
-### 周度复盘
+优先使用东方财富公开 K 线接口；失败时回退到：
 
-1. 使用 `templates/review-template.md` 进行复盘
-2. 对比AI预测与实际走势
-3. 验证策略有效性
+1. `.cache\ohlcv\`
+2. 可复现示例数据
 
-## ETF替代方案
-
-| 代码 | 名称 | 特点 |
-|------|------|------|
-| 159381 | 创业板人工智能ETF华夏 | AI算力含量56%，费率0.20% |
-| 159142 | 科创创业人工智能ETF景顺 | 覆盖全产业链 |
-
-## 风险提示
-
-- AI芯片赛道估值较高，需关注业绩兑现情况
-- 源杰科技股价已涨10倍+，估值极高
-- 芯原股份、佳力图尚未盈利，属于成长/困境反转标的
-- 建议分批建仓，避免追高
-- 严格执行止损纪律
-
-## 更新日志
-
-- 2026-04-08: 初始版本，完成股票池配置
-- 2026-04-08: 新增持仓管理系统、复盘模板、信号确认机制
-- 2026-04-08: 新增市场环境配置、事件日历、数据源规范
-
----
-
-*本仓库仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。*
+任何 `未校验` 字段不会伪装成已确认事实。

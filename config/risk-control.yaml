@@ -1,158 +1,85 @@
-# 风险控制配置
-# 更新日期：2026-04-08
+# 风控配置
 
-# ============================================================
-# 仓位管理
-# ============================================================
 position_management:
+  total_ai_limit: 0.50
+  max_sector_limit: 0.25
 
-  # 总仓位上限（占总资金比例）
-  total_ai_sector_limit: 0.50     # AI算力板块总仓位不超过50%
-
-  # 单只股票仓位上限
-  single_stock_limit: 0.10        # 单只股票不超过总资金10%
-
-  # 按股票类型的仓位建议
-  position_by_rank:
-    leader:                        # 龙头股（工业富联、中际旭创等）
+  role_limits:
+    leader:
       max: 0.10
       recommended: 0.08
-      note: "业绩稳定，可适当提高仓位"
-    sub_leader:                    # 次龙头股
+    sub_leader:
       max: 0.07
       recommended: 0.05
-      note: "弹性更大，风险也更高，控制仓位"
-    high_risk:                     # 高风险股（未盈利、高估值）
+    high_risk:
       max: 0.05
       recommended: 0.03
-      note: "仅小仓位参与，适合做弹性"
+    etf:
+      max: 0.12
+      recommended: 0.10
 
-  # 高风险股票列表（需要特别控制仓位）
-  high_risk_stocks:
-    - code: "688498"
-      name: "源杰科技"
-      reason: "股价已涨10倍+，估值极高"
-    - code: "688521"
-      name: "芯原股份"
-      reason: "尚未盈利，成长股风险"
-    - code: "603912"
-      name: "佳力图"
-      reason: "尚未盈利，困境反转标的"
-    - code: "300474"
-      name: "景嘉微"
-      reason: "亏损中，预期扭亏存在不确定性"
+  market_regime_multipliers:
+    risk_on: 1.00
+    neutral: 1.00
+    risk_off: 0.75
+    crisis: 0.50
 
-  # 分批建仓策略
-  batch_entry:
-    batches: 3                     # 分3批建仓
-    batch_ratios: [0.4, 0.35, 0.25]  # 第1批40%、第2批35%、第3批25%
-    trigger_conditions:
-      batch_1: "超跌信号确认（评分≥50分），现价附近建仓"
-      batch_2: "从第1批买入价再跌5-8%，加仓摊薄"
-      batch_3: "从第1批买入价再跌10-15%，最后加仓"
-    note: "如果继续下跌超过15%且基本面未变，考虑止损而非继续加仓"
+  liquidity_adjustment:
+    amount_percentile_breaks: [0.20, 0.50, 0.80]
+    multipliers: [0.60, 0.85, 1.00, 1.10]
 
-
-# ============================================================
-# 止损规则
-# ============================================================
 stop_loss:
+  primary_mode: "atr"
+  fixed_pct: 0.15
+  atr:
+    period: 14
+    multiplier: 2.5
+    floor_pct: 0.08
+    cap_pct: 0.18
 
-  # 个股止损线
-  single_stock:
-    hard_stop: -0.15               # 硬止损：亏损超过15%必须止损
-    warning: -0.10                 # 警戒线：亏损超过10%时重新评估
-    review_required: -0.07         # 关注线：亏损超过7%时写止损复盘
-
-  # 止损执行原则
-  stop_loss_rules:
-    - "硬止损不讲价：���损超过15%，无论看法如何，先止损再分析"
-    - "止损后冷静3天，再决定是否重新建仓"
-    - "同一只股票连续止损2次，移出股票池观察名单"
-    - "基本面发生重大变化（业绩暴雷、核心客户丢失），不等技术止损直接清仓"
-
-  # 止损豁免条件（以下情况可酌情不止损）
-  stop_loss_exemptions:
-    - condition: "大盘系统性下跌（沪深300单日跌超3%）"
-      action: "可暂缓止损，等待系统性风险释放"
-    - condition: "超跌评分≥70且无基本面利空"
-      action: "可拆分止��，先减仓50%，保留核心仓位"
-
-
-# ============================================================
-# 获利了结规则
-# ============================================================
 take_profit:
+  primary: 0.20
+  secondary: 0.35
+  trailing_note: "更强调用确认信号与相对强弱做跟踪，不强制脚本给卖点。"
 
-  # 目标收益率
-  targets:
-    primary: 0.20                  # 主要目标：盈利20%减半仓
-    secondary: 0.35                # 次要目标：盈利35%再减一半
-    full_exit: 0.50                # 全部离场：盈利50%或RSI超买（>75）
+entry_management:
+  batches: [0.40, 0.35, 0.25]
 
-  # 获利了结原则
-  take_profit_rules:
-    - "盈利20%后，减持50%仓位锁定利润，剩余仓位成本大幅降低"
-    - "RSI(14)超过75，无论盈亏考虑减仓"
-    - "KDJ三线死叉且评分<20，考虑清仓"
-    - "赛道基本面发生重大利好（如大订单公告），可适当延迟止盈"
+  batch_1:
+    require_confirmation_pass: true
+    min_oversold_score: 50
+    action_if_failed: "观察"
 
+  batch_2:
+    require_close_above_ma5: true
+    require_not_break_recent_low: true
+    recent_low_lookback: 5
 
-# ============================================================
-# 组合层面风险控制
-# ============================================================
-portfolio_risk:
+  batch_3:
+    require_close_above_ma10: true
+    require_macd_improvement: true
 
-  # 赛道分散要求
-  sector_diversification:
-    max_single_sector: 0.25        # 单一赛道仓位不超过总资金25%
-    min_sectors: 2                 # 至少分散在2个赛道
-    preferred_sectors: 3           # 理想分散到3个赛道
+pre_trade_checklist:
+  must_pass:
+    - "universe_hard_filters"
+    - "data_quality_ok"
+    - "confirmation_pass"
+    - "liquidity_ok"
+    - "no_earnings_blackout"
+  allow_watch_if_failed:
+    - "confirmation_pass"
+    - "no_earnings_blackout"
 
-  # 总体止损线（组合层面）
-  portfolio_stop:
-    monthly_drawdown_warning: -0.10    # 月度亏损超过10%，暂停操作，全面复盘
-    monthly_drawdown_stop: -0.15       # 月度亏损超过15%，清仓离场，休息1个月
+action_mapping:
+  small_trial:
+    min_oversold_score: 50
+    require_confirmation_pass: true
+    max_blocking_risk_flags: 2
+  observe:
+    min_oversold_score: 35
+  reject_on_flags:
+    - "suspension_risk"
+    - "earnings_blackout"
 
-  # 市场环境评估
-  market_condition_filter:
-    bear_market_threshold: -0.20   # 大盘从高点回撤超20%，为熊市
-    bear_market_action: "熊市中总仓位降至25%以下，只持有最强龙头"
-    bull_market_threshold: 0.20    # 大盘从低点上涨超20%，为牛市
-    bull_market_action: "牛市中可适当提高仓位上限至60%"
-
-
-# ============================================================
-# 每周操作检查清单
-# ============================================================
-weekly_checklist:
-  before_analysis:
-    - "查看当前持仓盈亏状态"
-    - "是否有持仓触及止损线？"
-    - "检查本周有无重大基本面事件（季报、公告等）"
-
-  during_analysis:
-    - "使用AGENTS.md引导AI完成分析"
-    - "填写multi-ai-vote.md汇总表"
-    - "仅对超跌评分≥50分的股票考虑操作"
-
-  after_decision:
-    - "新操作是否符合仓位限制？"
-    - "总仓位是否超过50%上限？"
-    - "单只股票是否超过10%上限？"
-    - "是否设置了止损提醒？"
-
-
-# ============================================================
-# 特殊市场事件应对
-# ============================================================
-special_events:
-
-  earnings_season:                 # 季报季（每年1/4/7/10月）
-    action: "季报公布前后，高估值股票波动加大，建议暂缓建仓或减小仓位"
-
-  geopolitical_risk:              # 地缘政治风险（如贸易战、制裁）
-    action: "涉及美国客户占比高的股票（如新易盛78%北美收入）需特别关注，可提前减仓"
-
-  sector_policy:                  # 行业政策变化
-    action: "国产替代相关政策利好可适当提高芯片赛道仓位上限至15%"
+reporting:
+  checklist_title: "下单前检查清单"
